@@ -14,7 +14,7 @@ function Home() {
       <img src={introImg} alt="Example on how the app work" />
       <Container>
         <h1>Share ride, reduce cost</h1>
-        <p class="large">
+        <p className="large">
           Register your route on the map, and we’ll send you matches for people
           taking the same route, so you could share the same ride.
         </p>
