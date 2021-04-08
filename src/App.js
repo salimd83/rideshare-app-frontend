@@ -1,5 +1,5 @@
 import React from "react";
-import "./App.css";
+import "./App.scss";
 import logoImg from "./assets/images/logo.png";
 import Home from "./pages/Home";
 import Container from "./components/Container";
