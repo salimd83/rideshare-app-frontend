@@ -9,6 +9,9 @@ const StyledHome = styled.div`
   grid-gap: 60px;
   @media (max-width: 767px) {
     display: block;
+    .form {
+      display: none;
+    }
   }
   img {
     width: 100%;
@@ -43,7 +46,9 @@ function Home() {
           </div>
         </div>
 
-        <RegistrationForm />
+        <div class="form">
+          <RegistrationForm />
+        </div>
       </StyledHome>
     </Container>
   );
