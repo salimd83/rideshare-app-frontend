@@ -43,7 +43,7 @@ p.large {
   line-height: 21px;
 }
 
-button {
+button, .button {
   border: none;
   background: var(--primary-color);
   border-radius: 5px;
@@ -51,6 +51,7 @@ button {
   font-size: 16px;
   color: var(--light-color);
   padding: 10px 20px;
+  text-decoration: none;
 }
 
 .page {

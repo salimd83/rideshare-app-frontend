@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {Link} from 'react-router-dom';
 import introImg from "../assets/images/app-intro.png";
 import Container from "../components/Container";
 import RegistrationForm from "../components/RegistrationForm";
@@ -42,7 +43,7 @@ function Home() {
               Register your route on the map, and we’ll send you matches for
               people taking the same route, so you could share the same ride.
             </p>
-            <button>Get started</button>
+            <Link to="/register" class="button">Get started</Link>
           </div>
         </div>
 
