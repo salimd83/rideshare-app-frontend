@@ -52,15 +52,9 @@ button, .button {
   color: var(--light-color);
   padding: 10px 20px;
   text-decoration: none;
-}
-
-.page {
-  h1 {
-    // padding: 0 25px;
+  &:disabled {
+    background-color: var(--light-gray-color);
   }
-  // .page-p {
-  //   padding: 0 25px;
-  // }
 }
 
 form {
@@ -81,6 +75,11 @@ form {
       height: 43px;
       padding: 5px 10px;
       color: var(--gray-color);
+      font-size: 14px;
+    }
+    .error {
+      color: var(--primary-color);
+      padding-top: 8px;
       font-size: 14px;
     }
   }
