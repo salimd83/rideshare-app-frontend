@@ -4,7 +4,15 @@ import * as yup from "yup";
 const schema = yup.object().shape({
   name: yup.string().required().min(4),
   email: yup.string().required().email(),
-  password: yup.string().required().min(8),
+  password: yup
+    .string()
+    .required()
+    .matches(
+      new RegExp(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/
+      ),
+      "Password must be between 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character."
+    ),
   repassword: yup
     .string()
     .required()
@@ -18,14 +26,31 @@ function RegistrationForm() {
       <Formik
         initialValues={{ name: "", email: "", password: "", repassword: "" }}
         validationSchema={schema}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 600);
+        onSubmit={async (
+          values,
+          { setSubmitting, setFieldError, resetForm }
+        ) => {
+          try {
+            const res = await fetch("http://localhost:3001/users", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(values),
+            });
+            const data = await res.json();
+            console.log(res)
+            if (!res.ok) throw new Error(data.message);
+            resetForm();
+          } catch (error) {
+            console.log(error)
+            if (error.message === "duplicate email.")
+              setFieldError("email", "Email is already in use.");
+          }
+          setSubmitting(false);
         }}
       >
-        {({ values, handleChange, handleBlur, isSubmitting }) => (
+        {({ isSubmitting }) => (
           <Form>
             <div className="field">
               <label htmlFor="name-input">Full name</label>
@@ -48,14 +73,7 @@ function RegistrationForm() {
             </div>
             <div className="field">
               <label htmlFor="repassword-input">Verify Password</label>
-              <input
-                type="text"
-                name="repassword"
-                id="repassword-input"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.repassword}
-              />
+              <Field type="text" name="repassword" id="repassword-input" />
               <ErrorMessage
                 name="repassword"
                 component="span"
