@@ -37,17 +37,17 @@ function Home() {
       <StyledHome>
         <div>
           <img src={introImg} alt="Example on how the app work" />
-          <div class="home-content">
+          <div className="home-content">
             <h1>Share ride, reduce cost</h1>
             <p className="large">
               Register your route on the map, and we’ll send you matches for
               people taking the same route, so you could share the same ride.
             </p>
-            <Link to="/register" class="button">Get started</Link>
+            <Link to="/register" className="button">Get started</Link>
           </div>
         </div>
 
-        <div class="form">
+        <div className="form">
           <RegistrationForm />
         </div>
       </StyledHome>
