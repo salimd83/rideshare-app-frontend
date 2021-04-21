@@ -1,5 +1,7 @@
 import { Formik, ErrorMessage, Form, Field } from "formik";
+import { useHistory, useLocation } from "react-router-dom";
 import * as yup from "yup";
+import api from "../helpers/api";
 
 const schema = yup.object().shape({
   name: yup.string().required().min(4),
@@ -20,34 +22,37 @@ const schema = yup.object().shape({
 });
 
 function RegistrationForm() {
+  const history = useHistory();
+  const location = useLocation();
+
+  async function sendVerificationEmail(redirect, redirect2) {
+    await api("post", "/users/verification", { redirect, redirect2 }, true);
+    history.replace("/verify");
+  }
+
+  const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
+    try {
+      const data = await api("post", "/users", values);
+      localStorage.setItem("token", data.token);
+      sendVerificationEmail(
+        `${process.env.REACT_APP_BASE_URL}/${location.pathname}`,
+        `${process.env.REACT_APP_BASE_URL}/verify`
+      );
+    } catch (error) {
+      console.log(error);
+      if (error.message === "duplicate email.")
+        setFieldError("email", "Email is already in use.");
+    }
+    setSubmitting(false);
+  };
+
   return (
-    <div className="page">
+    <div>
       <h1>Create new account</h1>
       <Formik
         initialValues={{ name: "", email: "", password: "", repassword: "" }}
         validationSchema={schema}
-        onSubmit={async (
-          values,
-          { setSubmitting, setFieldError, resetForm }
-        ) => {
-          try {
-            const res = await fetch("http://localhost:3001/users", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(values),
-            });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message);
-            resetForm();
-          } catch (error) {
-            console.log(error);
-            if (error.message === "duplicate email.")
-              setFieldError("email", "Email is already in use.");
-          }
-          setSubmitting(false);
-        }}
+        onSubmit={handleSubmit}
       >
         {({ isSubmitting }) => (
           <Form>
